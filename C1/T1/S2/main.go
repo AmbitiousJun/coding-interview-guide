@@ -4,7 +4,7 @@
 //
 //	① stackMin 为空, num 入栈 stackMin
 //	② stackMin 不为空, 但 num < (stackMin 中的最小值), num 入栈 stackMin
-//	③ stackMin 为空, 但 num == (stackMin 中的最小值), (stackMin 中的最小值) 重复入栈 stackMin
+//	③ stackMin 不为空, 但 num == (stackMin 中的最小值), (stackMin 中的最小值) 重复入栈 stackMin
 //
 // pop: num 从 stackData 出栈, 同时也弹出 stackMin 中的栈顶元素
 //
