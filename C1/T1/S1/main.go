@@ -12,7 +12,10 @@
 // getMin: 获取 stackMin 的栈顶元素
 package main
 
-import "fmt"
+import (
+	"coding_interview_guide/common/stack"
+	"fmt"
+)
 
 func main() {
 	s := NewMyStack()
@@ -28,39 +31,38 @@ func main() {
 }
 
 type MyStack struct {
-	stackData []int
-	stackMin  []int
+	stackData *stack.S[int]
+	stackMin  *stack.S[int]
 }
 
 func NewMyStack() *MyStack {
 	return &MyStack{
-		stackData: []int{},
-		stackMin:  []int{},
+		stackData: stack.New(0),
+		stackMin:  stack.New(0),
 	}
 }
 
 func (ms *MyStack) Push(num int) {
-	ms.stackData = append(ms.stackData, num)
-	if len(ms.stackMin) == 0 || num <= ms.Min() {
-		ms.stackMin = append(ms.stackMin, num)
+	ms.stackData.Push(num)
+	if ms.stackMin.Empty() || num <= ms.Min() {
+		ms.stackMin.Push(num)
 	}
 }
 
 func (ms *MyStack) Pop() int {
-	if len(ms.stackData) == 0 {
+	if ms.stackData.Empty() {
 		panic("Empty stack")
 	}
-	num := ms.stackData[len(ms.stackData)-1]
-	ms.stackData = ms.stackData[:len(ms.stackData)-1]
+	num := ms.stackData.Pop()
 	if num == ms.Min() {
-		ms.stackMin = ms.stackMin[:len(ms.stackMin)-1]
+		ms.stackMin.Pop()
 	}
 	return num
 }
 
 func (ms *MyStack) Min() int {
-	if len(ms.stackMin) == 0 {
+	if ms.stackMin.Empty() {
 		panic("Empty stack")
 	}
-	return ms.stackMin[len(ms.stackMin)-1]
+	return ms.stackMin.Peek()
 }
