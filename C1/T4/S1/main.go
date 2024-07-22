@@ -4,7 +4,11 @@
 // 只要在入队时维护好时间戳变量, 在出队的时候就能够依据时间戳正确出队
 package main
 
-import "fmt"
+import (
+	"coding_interview_guide/common/integer"
+	"coding_interview_guide/common/queue"
+	"fmt"
+)
 
 func main() {
 	dcq := NewDogCatQueue()
@@ -49,26 +53,24 @@ func NewPetWrapper(p Pet, cnt int) *PetWrapper {
 }
 
 type DogCatQueue struct {
-	DogQ []*PetWrapper
-	CatQ []*PetWrapper
-	Cnt  int
+	DogQ *queue.Q[*PetWrapper]
+	CatQ *queue.Q[*PetWrapper]
+	Cnt  integer.I
 }
 
 func NewDogCatQueue() *DogCatQueue {
 	return &DogCatQueue{
-		DogQ: make([]*PetWrapper, 0),
-		CatQ: make([]*PetWrapper, 0),
+		DogQ: queue.New((*PetWrapper)(nil)),
+		CatQ: queue.New((*PetWrapper)(nil)),
 		Cnt:  0,
 	}
 }
 
 func (dcq *DogCatQueue) Add(p Pet) {
 	if p.GetPetType() == "dog" {
-		dcq.DogQ = append(dcq.DogQ, NewPetWrapper(p, dcq.Cnt))
-		dcq.Cnt++
+		dcq.DogQ.Add(NewPetWrapper(p, dcq.Cnt.GetAndIncr()))
 	} else if p.GetPetType() == "cat" {
-		dcq.CatQ = append(dcq.CatQ, NewPetWrapper(p, dcq.Cnt))
-		dcq.Cnt++
+		dcq.CatQ.Add(NewPetWrapper(p, dcq.Cnt.GetAndIncr()))
 	} else {
 		panic("not dog or cat")
 	}
@@ -77,25 +79,21 @@ func (dcq *DogCatQueue) Add(p Pet) {
 func (dcq *DogCatQueue) PollAll() Pet {
 	if !dcq.IsCatEmpty() && !dcq.IsDogEmpty() {
 		// 两条队列都不为空, 选一个时间戳小的弹出
-		cFirst, dFirst := dcq.CatQ[0], dcq.DogQ[0]
+		cFirst, dFirst := dcq.CatQ.Peek(), dcq.DogQ.Peek()
 		if cFirst.Cnt < dFirst.Cnt {
-			dcq.CatQ = dcq.CatQ[1:]
+			dcq.CatQ.Poll()
 			return cFirst.Pet
 		}
-		dcq.DogQ = dcq.DogQ[1:]
+		dcq.DogQ.Poll()
 		return dFirst.Pet
 	}
 	if !dcq.IsCatEmpty() {
 		// 只有 cat 队列有数据
-		p := dcq.CatQ[0]
-		dcq.CatQ = dcq.CatQ[1:]
-		return p.Pet
+		return dcq.CatQ.Poll().Pet
 	}
 	if !dcq.IsDogEmpty() {
 		// 只有 dog 队列有数据
-		p := dcq.DogQ[0]
-		dcq.DogQ = dcq.DogQ[1:]
-		return p.Pet
+		return dcq.DogQ.Poll().Pet
 	}
 	panic("empty queue!")
 }
@@ -104,18 +102,14 @@ func (dcq *DogCatQueue) PollDog() *Dog {
 	if dcq.IsDogEmpty() {
 		panic("empty dog queue")
 	}
-	p := dcq.DogQ[0]
-	dcq.DogQ = dcq.DogQ[1:]
-	return p.Pet.(*Dog)
+	return dcq.DogQ.Poll().Pet.(*Dog)
 }
 
 func (dcq *DogCatQueue) PollCat() *Cat {
 	if dcq.IsCatEmpty() {
 		panic("empty cat queue")
 	}
-	p := dcq.CatQ[0]
-	dcq.CatQ = dcq.CatQ[1:]
-	return p.Pet.(*Cat)
+	return dcq.CatQ.Poll().Pet.(*Cat)
 }
 
 func (dcq *DogCatQueue) IsEmpty() bool {
@@ -123,9 +117,9 @@ func (dcq *DogCatQueue) IsEmpty() bool {
 }
 
 func (dcq *DogCatQueue) IsDogEmpty() bool {
-	return len(dcq.DogQ) == 0
+	return dcq.DogQ.Empty()
 }
 
 func (dcq *DogCatQueue) IsCatEmpty() bool {
-	return len(dcq.CatQ) == 0
+	return dcq.CatQ.Empty()
 }
