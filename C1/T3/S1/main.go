@@ -3,12 +3,15 @@
 // 作用分别是 “取出并移除栈底元素” 以及 “反转栈”
 package main
 
-import "fmt"
+import (
+	"coding_interview_guide/common/stack"
+	"fmt"
+)
 
 func main() {
 	s := NewStack()
 	for i := 1; i <= 5; i++ {
-		s.S = append(s.S, i)
+		s.Push(i)
 	}
 	fmt.Println("栈初始状态: ", s.S)
 	s.Reverse()
@@ -16,31 +19,30 @@ func main() {
 }
 
 type Stack struct {
-	S []int
+	*stack.S[int]
 }
 
 func NewStack() *Stack {
-	return &Stack{S: []int{}}
+	return &Stack{stack.New(0)}
 }
 
 func (s *Stack) Reverse() {
-	if len(s.S) == 0 {
+	if s.Empty() {
 		return
 	}
 	last := s.GetAndRemoveLastElm()
 	s.Reverse()
-	s.S = append(s.S, last)
+	s.Push(last)
 }
 
 func (s *Stack) GetAndRemoveLastElm() int {
-	res := s.S[len(s.S)-1]
-	s.S = s.S[:len(s.S)-1]
-	if len(s.S) == 0 {
+	res := s.Pop()
+	if s.Empty() {
 		// 取完一个数后, 栈空, 说明已经取到栈底元素
 		return res
 	}
 	// 栈不为空, 递归调用, 取出栈底, 再将当前数重新压回栈中
 	last := s.GetAndRemoveLastElm()
-	s.S = append(s.S, res)
+	s.Push(res)
 	return last
 }
