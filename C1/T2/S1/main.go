@@ -3,7 +3,10 @@
 // 在 add、poll、peek 操作前, 都尝试将 stackPush 中的数据倒入到 stackPop 中
 package main
 
-import "fmt"
+import (
+	"coding_interview_guide/common/stack"
+	"fmt"
+)
 
 func main() {
 	q := NewTwoStacksQueue()
@@ -25,48 +28,44 @@ func main() {
 }
 
 type TwoStacksQueue struct {
-	stackPush []int
-	stackPop  []int
+	stackPush *stack.S[int]
+	stackPop  *stack.S[int]
 }
 
 func NewTwoStacksQueue() *TwoStacksQueue {
 	return &TwoStacksQueue{
-		stackPush: []int{},
-		stackPop:  []int{},
+		stackPush: stack.New(0),
+		stackPop:  stack.New(0),
 	}
 }
 
 func (tsq *TwoStacksQueue) push2Pop() {
-	if len(tsq.stackPop) != 0 {
+	if !tsq.stackPop.Empty() {
 		// pop 栈不为空, 不能倒入新数据
 		return
 	}
-	for len(tsq.stackPush) != 0 {
-		num := tsq.stackPush[len(tsq.stackPush)-1]
-		tsq.stackPush = tsq.stackPush[:len(tsq.stackPush)-1]
-		tsq.stackPop = append(tsq.stackPop, num)
+	for !tsq.stackPush.Empty() {
+		tsq.stackPop.Push(tsq.stackPush.Pop())
 	}
 }
 
 func (tsq *TwoStacksQueue) Add(num int) {
-	tsq.stackPush = append(tsq.stackPush, num)
+	tsq.stackPush.Push(num)
 	tsq.push2Pop()
 }
 
 func (tsq *TwoStacksQueue) Poll() int {
 	tsq.push2Pop()
-	if len(tsq.stackPop) == 0 {
+	if tsq.stackPop.Empty() {
 		panic("Empty queue!")
 	}
-	num := tsq.stackPop[len(tsq.stackPop)-1]
-	tsq.stackPop = tsq.stackPop[:len(tsq.stackPop)-1]
-	return num
+	return tsq.stackPop.Pop()
 }
 
 func (tsq *TwoStacksQueue) Peek() int {
 	tsq.push2Pop()
-	if len(tsq.stackPop) == 0 {
+	if tsq.stackPop.Empty() {
 		panic("Empty queue!")
 	}
-	return tsq.stackPop[len(tsq.stackPop)-1]
+	return tsq.stackPop.Peek()
 }
