@@ -37,8 +37,8 @@ type MyStack struct {
 
 func NewMyStack() *MyStack {
 	return &MyStack{
-		stackData: stack.New(0),
-		stackMin:  stack.New(0),
+		stackData: stack.New[int](),
+		stackMin:  stack.New[int](),
 	}
 }
 

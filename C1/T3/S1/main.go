@@ -23,7 +23,7 @@ type Stack struct {
 }
 
 func NewStack() *Stack {
-	return &Stack{stack.New(0)}
+	return &Stack{stack.New[int]()}
 }
 
 func (s *Stack) Reverse() {

@@ -13,7 +13,7 @@ import (
 
 func main() {
 	nums := []int{1, 8, 8, 1, 1, 0, 1, 2, 1, 3, 8, 1, 5, 3, 5, 8, 2, 0, 7, 7, 1}
-	s := stack.New(0)
+	s := stack.New[int]()
 	for _, num := range nums {
 		s.Push(num)
 	}
@@ -23,7 +23,7 @@ func main() {
 }
 
 func SortStackByStack(s *stack.S[int]) {
-	help := stack.New(0)
+	help := stack.New[int]()
 	for !s.Empty() {
 		cur := s.Pop()
 		for !help.Empty() && help.Peek() < cur {

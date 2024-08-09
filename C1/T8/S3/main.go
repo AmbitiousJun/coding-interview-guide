@@ -19,7 +19,7 @@ func main() {
 
 func GetNearLess(arr []int) [][]int {
 	res := make([][]int, len(arr))
-	s := stack.New((*list.L[int])(nil))
+	s := stack.New[*list.L[int]]()
 	for i, num := range arr {
 		for !s.Empty() && arr[s.Peek().Get(0)] > num {
 			UpdateResult(res, s, i)

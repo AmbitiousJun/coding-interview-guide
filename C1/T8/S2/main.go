@@ -26,7 +26,7 @@ func main() {
 
 func GetNearLessNoRepeat(arr []int) [][]int {
 	res := make([][]int, len(arr))
-	s := stack.New(0)
+	s := stack.New[int]()
 	for i, num := range arr {
 		for !s.Empty() && arr[s.Peek()] > num {
 			UpdateResult(res, s, i)

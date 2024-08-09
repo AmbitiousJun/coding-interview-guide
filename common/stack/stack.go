@@ -8,8 +8,7 @@ type S[T any] struct {
 }
 
 // New 初始化一个通用栈结构
-// 传入指定类型的任意值确定泛型
-func New[T any](typeElm T) *S[T] {
+func New[T any]() *S[T] {
 	return &S[T]{arr: []T{}}
 }
 

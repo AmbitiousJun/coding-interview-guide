@@ -29,7 +29,7 @@ func HanoiProblem(num int, left, mid, right string) int {
 		return 0
 	}
 	// 初始化 3 个栈并加入三个绝对最大值, 方便代码运行
-	lS, mS, rS := stack.New(0), stack.New(0), stack.New(0)
+	lS, mS, rS := stack.New[int](), stack.New[int](), stack.New[int]()
 	lS.Push(math.MaxInt32)
 	mS.Push(math.MaxInt32)
 	rS.Push(math.MaxInt32)

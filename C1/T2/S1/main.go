@@ -34,8 +34,8 @@ type TwoStacksQueue struct {
 
 func NewTwoStacksQueue() *TwoStacksQueue {
 	return &TwoStacksQueue{
-		stackPush: stack.New(0),
-		stackPop:  stack.New(0),
+		stackPush: stack.New[int](),
+		stackPop:  stack.New[int](),
 	}
 }
 
