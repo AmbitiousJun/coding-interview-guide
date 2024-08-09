@@ -8,8 +8,7 @@ type D[T any] struct {
 }
 
 // New 初始化一个通用双端队列结构
-// 传入指定类型的任意值确定泛型
-func New[T any](typeElm T) *D[T] {
+func New[T any]() *D[T] {
 	return &D[T]{arr: []T{}}
 }
 

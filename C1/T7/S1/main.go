@@ -24,7 +24,7 @@ func GetMaxWindow(arr []int, w int) []int {
 	if arr == nil || w < 1 || len(arr) < w {
 		return nil
 	}
-	qmax := deque.New(0)
+	qmax := deque.New[int]()
 	res := make([]int, len(arr)-w+1)
 	var index integer.I = 0
 	for i, num := range arr {
