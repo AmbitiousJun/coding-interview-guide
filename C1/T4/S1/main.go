@@ -60,8 +60,8 @@ type DogCatQueue struct {
 
 func NewDogCatQueue() *DogCatQueue {
 	return &DogCatQueue{
-		DogQ: queue.New((*PetWrapper)(nil)),
-		CatQ: queue.New((*PetWrapper)(nil)),
+		DogQ: queue.New[*PetWrapper](),
+		CatQ: queue.New[*PetWrapper](),
 		Cnt:  0,
 	}
 }
