@@ -8,7 +8,7 @@ import (
 )
 
 func TestRemove(t *testing.T) {
-	l := list.New(0)
+	l := list.New[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(1)

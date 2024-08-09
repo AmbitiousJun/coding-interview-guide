@@ -30,7 +30,7 @@ func GetNearLess(arr []int) [][]int {
 			s.Peek().Add(i)
 		} else {
 			// 新建 list
-			l := list.New(0)
+			l := list.New[int]()
 			l.Add(i)
 			s.Push(l)
 		}

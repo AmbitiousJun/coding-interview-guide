@@ -8,8 +8,7 @@ type L[T any] struct {
 }
 
 // New 初始化一个通用列表结构
-// 传入指定类型的任意值确定泛型
-func New[T any](typeElm T) *L[T] {
+func New[T any]() *L[T] {
 	return &L[T]{arr: []T{}}
 }
 
